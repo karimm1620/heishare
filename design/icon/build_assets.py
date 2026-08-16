@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, '.')
 from geometry import rounded_square_path
-from PIL import Image, ImageDraw
+from PIL import Image
 import cairosvg
 
 CANVAS = 1024
@@ -80,7 +80,7 @@ write_svg('out/glyph_safezone.svg', f'''<svg xmlns="http://www.w3.org/2000/svg" 
 </svg>''')
 
 write_svg('out/glyph_monochrome.svg', f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {CANVAS} {CANVAS}">
-<g transform="translate({CX},{CY}) scale({scale}) translate({-CX},{-CY})">
+<g transform="translate({CX},{CY}) scale({scale}) translate({-CX}, {-CY})">
 <path d="{PANEL_A}" fill="#ffffff"/>
 <path d="{PANEL_B}" fill="#ffffff"/>
 </g>
@@ -99,31 +99,22 @@ for src, dst in renders:
     cairosvg.svg2png(url=src, write_to=dst, output_width=CANVAS, output_height=CANVAS)
 
 
-def make_glass_layers(prefix, mask_path, fill_alpha=72, border_alpha=90):
+def make_glass_layers(prefix, mask_path, fill_alpha=72):
     mask = Image.open(mask_path).convert('L')
     layer = Image.new('RGBA', (CANVAS, CANVAS), (255, 255, 255, 0))
     layer.putalpha(mask.point(lambda p: p * fill_alpha // 255))
     layer.save(f'out/{prefix}_glass.png')
-
-    border = Image.new('RGBA', (CANVAS, CANVAS), (255, 255, 255, 0))
-    draw = ImageDraw.Draw(border)
-    draw.bitmap((0, 0), mask, fill=(255, 255, 255, border_alpha))
-    border_alpha_mask = mask.filter(ImageFilter.MaxFilter(11)) if False else mask
-    border.putalpha(border_alpha_mask.point(lambda p: p * border_alpha // 255))
-    border.save(f'out/{prefix}_glass_border.png')
 
     mask_rgba = Image.new('RGBA', (CANVAS, CANVAS), (255, 255, 255, 0))
     mask_rgba.putalpha(mask)
     mask_rgba.save(f'out/{prefix}_mask.png')
 
 
-# Names consumed by compose.py and compose_android.py.
+# Exact composition inputs consumed by compose.py and compose_android.py.
 make_glass_layers('panel_a', 'out/panel-a.png')
 make_glass_layers('panel_b', 'out/panel-b.png')
 make_glass_layers('android_panel_a', 'out/glyph_safezone.png')
 make_glass_layers('android_panel_b', 'out/glyph_safezone.png')
-
-# Preserve the exact monochrome asset names consumed by compose_android.py.
 Image.open('out/glyph_monochrome.png').convert('RGBA').save('out/android_monochrome.png')
 
 print('Rendered base assets and composition inputs')
