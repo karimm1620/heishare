@@ -1,0 +1,9 @@
+{
+  "platforms": ["android", "ios"],
+  "android": {
+    "modules": ["expo.modules.localnetwork.LocalNetworkModule"]
+  },
+  "ios": {
+    "modules": ["LocalNetworkModule"]
+  }
+}

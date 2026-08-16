@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display:
+    Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol, Noto Color Emoji;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+  --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
+
+  /* Calm, utility-first palette — see 04-ui-ux.md §1. RGB triplets (no
+     `rgb()` wrapper) so Tailwind's `<alpha-value>` opacity modifiers work,
+     e.g. `bg-primary/10`. */
+  --color-background: 250 250 250;
+  --color-foreground: 24 24 27;
+  --color-card: 255 255 255;
+  --color-card-foreground: 24 24 27;
+  --color-border: 228 228 231;
+  --color-muted: 244 244 245;
+  --color-muted-foreground: 113 113 122;
+  --color-primary: 37 99 235;
+  --color-primary-foreground: 255 255 255;
+  --color-accent: 238 242 255;
+  --color-accent-foreground: 55 48 163;
+  --color-destructive: 220 38 38;
+  --color-destructive-foreground: 255 255 255;
+  --color-success: 22 163 74;
+  --color-success-foreground: 255 255 255;
+  --color-warning: 217 119 6;
+  --color-ring: 37 99 235;
+}
+
+.dark:root {
+  --color-background: 9 9 11;
+  --color-foreground: 244 244 245;
+  --color-card: 24 24 27;
+  --color-card-foreground: 244 244 245;
+  --color-border: 39 39 42;
+  --color-muted: 39 39 42;
+  --color-muted-foreground: 161 161 170;
+  --color-primary: 96 165 250;
+  --color-primary-foreground: 9 9 11;
+  --color-accent: 30 41 59;
+  --color-accent-foreground: 191 219 254;
+  --color-destructive: 248 113 113;
+  --color-destructive-foreground: 9 9 11;
+  --color-success: 74 222 128;
+  --color-success-foreground: 9 9 11;
+  --color-warning: 251 191 36;
+  --color-ring: 96 165 250;
+}

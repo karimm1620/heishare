@@ -1,0 +1,8 @@
+{
+  "name": "local-network",
+  "version": "0.1.0",
+  "description": "Native TCP/UDP/TLS + streaming file I/O bridge for heishare (Layer D). Not published — autolinked from modules/ at the project root.",
+  "main": "index.ts",
+  "types": "index.ts",
+  "private": true
+}
