@@ -1,27 +1,16 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
 
 group = 'expo.modules.localnetwork'
 version = '0.1.0'
 
-def expoModulesCorePlugin = new File(project(":expo-modules-core").projectDir.absolutePath, "ExpoModulesCorePlugin.gradle")
-if (expoModulesCorePlugin.exists()) {
-  apply from: expoModulesCorePlugin
-  applyKotlinExpoModulesCorePlugin()
-}
-
 android {
   namespace "expo.modules.localnetwork"
   defaultConfig {
-    minSdkVersion safeExtGet("minSdkVersion", 24)
-    targetSdkVersion safeExtGet("targetSdkVersion", 35)
-  }
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_17
-    targetCompatibility JavaVersion.VERSION_17
-  }
-  kotlinOptions {
-    jvmTarget = "17"
+    versionCode 1
+    versionName "0.1.0"
   }
 }
 
@@ -29,10 +18,23 @@ dependencies {
   // No third-party networking/TLS/JSON libraries — TCP/UDP/TLS use the
   // platform java.net/javax.net.ssl APIs directly, and JSON parsing uses
   // org.json (bundled with Android) rather than adding Gson/Moshi/etc.
-  // See 05-project-structure-and-dependencies.md §4 (dependency rules) and
-  // 06-performance-and-size.md §1 (50 MB target).
-}
-
-def safeExtGet(prop, fallback) {
-  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+  // See docs/prd/05-project-structure-and-dependencies.md §4 (dependency
+  // rules) and docs/prd/06-performance-and-size.md §1 (50 MB target).
+  //
+  // compileSdk/minSdk/targetSdk, the Kotlin/KSP toolchain, lint options,
+  // the expo-modules-core dependency, and the "release" publishing variant
+  // itself are all applied automatically by the 'expo-module-gradle-plugin'
+  // plugin above (see node_modules/expo-modules-core/expo-module-gradle-plugin) —
+  // do not re-declare them here. Two real EAS build failures got this file
+  // to its current state:
+  //   1. The original manual `apply plugin` + ExpoModulesCorePlugin.gradle
+  //      pattern was missing `compileSdk` entirely, and (as a cascading
+  //      symptom of the same failure) a missing "release" SoftwareComponent.
+  //      Fixed by switching to the plugin above, matching every real Expo
+  //      SDK 57 module.
+  //   2. The plugin's publishing step (MavenPublicationExtension.kt) reads
+  //      android.defaultConfig.versionName via requireNotNull — every real
+  //      module keeps a small `defaultConfig { versionCode; versionName }`
+  //      alongside the plugin for exactly this reason, which the first fix
+  //      missed by removing defaultConfig entirely instead of trimming it.
 }
