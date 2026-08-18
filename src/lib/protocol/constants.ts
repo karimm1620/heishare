@@ -1,8 +1,8 @@
 /**
- * Versioned LocalShare-family protocol constants for heishare.
+ * Versioned local-network protocol constants for heishare.
  *
  * heishare does not claim LocalSend interoperability (see 02-networking-architecture.md §10)
- * — it follows the same local-network *architecture* (UDP multicast discovery,
+ * — it follows the same local-network architecture (UDP multicast discovery,
  * REST-style HTTPS API, port 53317) with its own versioned namespace.
  */
 
@@ -13,7 +13,8 @@ export const DEFAULT_PORT = 53317;
 /** Reference multicast group per 02-networking-architecture.md §4. */
 export const MULTICAST_GROUP = '224.0.0.167';
 
-export const API_NAMESPACE = '/api/heishare/v1';
+/** Versioned LocalShare protocol namespace from the PRD. */
+export const API_NAMESPACE = '/api/localshare/v1';
 
 export const ENDPOINTS = {
   register: `${API_NAMESPACE}/register`,
@@ -30,6 +31,8 @@ export const LIMITS = {
   maxMetadataBodyBytes: 64 * 1024,
   /** Max UTF-16 code units for a single text-transfer payload. */
   maxTextPayloadLength: 100_000,
+  /** Max UTF-8 bytes for a single text-transfer payload. */
+  maxTextPayloadBytes: 256 * 1024,
   /** Max files in one prepare-upload request. */
   maxFilesPerTransfer: 200,
   /** Max simultaneous incoming preparations awaiting a user decision. */
@@ -45,4 +48,4 @@ export const LIMITS = {
 } as const;
 
 export const TRANSFER_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-export const FILE_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+export const FILE_ID_PATTERN = TRANSFER_ID_PATTERN;
